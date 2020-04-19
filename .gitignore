@@ -1,0 +1,21 @@
+[Tt]emp/
+[Oo]bj/
+[Bb]uild
+Library/
+Local/
+sysinfo.txt
+*.stackdump
+# ============================================= #
+# Visual Studio / MonoDevelop / Rider generated #
+# ============================================= #
+[Ee]xported[Oo]bj/
+.vs/
+/*.userprefs
+/*.csproj
+/*.pidb
+/*.suo
+/*.sln*
+/*.user
+/*.unityproj
+/*.booproj
+/.idea*/
