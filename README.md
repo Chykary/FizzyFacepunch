@@ -1,3 +1,6 @@
+# ⚠️ Work in progress
+If you just discovered this repo, **please be patient**. There will be expected issues and also the information down below will not be fully accurate until we have finished fizzyfacepunch. **Thank you!**
+
 # FizzyFacepunch
 
 This is an alternative version of **[FizzySteamworks](https://github.com/Chykary/FizzySteamworks)** that uses Facepunch instead of Steamworks.NET.
