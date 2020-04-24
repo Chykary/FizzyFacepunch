@@ -1,5 +1,4 @@
 # FizzyFacepunch
-Project Website: https://github.com/Chykary/FizzyFacepunch
 
 This is an alternative version of **[FizzySteamworks](https://github.com/Chykary/FizzySteamworks)** that uses Facepunch instead of Steamworks.NET.
 
