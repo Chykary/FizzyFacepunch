@@ -22,7 +22,7 @@ namespace Mirror.FizzySteam
         [Tooltip("Timeout for connecting in seconds.")]
         public int Timeout = 25;
         [Tooltip("The Steam ID for your application.")]
-        public string SteamAppID = "480";
+        public uint SteamAppID = 480;
         [Tooltip("Allow or disallow P2P connections to fall back to being relayed through the Steam servers if a direct connection or NAT-traversal cannot be established.")]
         public bool AllowSteamRelay = true;
 
@@ -32,25 +32,17 @@ namespace Mirror.FizzySteam
 
         private void Awake()
         {
-            const string fileName = "steam_appid.txt";
-            if (File.Exists(fileName))
-            {
-                string content = File.ReadAllText(fileName);
-                if (content != SteamAppID)
-                {
-                    File.WriteAllText(fileName, SteamAppID.ToString());
-                    Debug.Log($"Updating {fileName}. Previous: {content}, new SteamAppID {SteamAppID}");
-                }
-            }
-            else
-            {
-                File.WriteAllText(fileName, SteamAppID.ToString());
-                Debug.Log($"New {fileName} written with SteamAppID {SteamAppID}");
-            }
-
             Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamMirror.");
 
-            Invoke(nameof(FetchSteamID), 1f);
+            try
+            {
+                SteamClient.Init(SteamAppID, false);
+                Invoke(nameof(FetchSteamID), 1f);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"FizzyFacepunch could not initialise: {e.Message}");
+            }
         }
 
         private void LateUpdate() => activeNode?.ReceiveData(); 
@@ -77,7 +69,7 @@ namespace Mirror.FizzySteam
                 Debug.Log($"Starting client, target address {address}.");
 
                 SteamNetworking.AllowP2PPacketRelay(AllowSteamRelay);
-                client = Client.CreateClient(this, address);
+                client = Client.CreateClient(this, ulong.Parse(address));
                 activeNode = client;
             }
             else

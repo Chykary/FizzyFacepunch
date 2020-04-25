@@ -44,6 +44,7 @@ namespace Mirror.FizzySteam
 
         protected override void OnReceiveInternalData(InternalMessages type, SteamId clientSteamID)
         {
+            Debug.Log(type);
             switch (type)
             {
                 case InternalMessages.CONNECT:

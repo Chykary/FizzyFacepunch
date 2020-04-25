@@ -25,7 +25,7 @@ namespace Mirror.FizzySteam
             ConnectionTimeout = TimeSpan.FromSeconds(Math.Max(1, transport.Timeout));
         }
 
-        public static Client CreateClient(FizzyFacepunch transport, string host)
+        public static Client CreateClient(FizzyFacepunch transport, ulong host)
         {
             Client c = new Client(transport);
 
@@ -46,18 +46,16 @@ namespace Mirror.FizzySteam
             return c;
         }
 
-        private async void Connect(string host)
+        private async void Connect(ulong host)
         {
             cancelToken = new CancellationTokenSource();
 
             try
             {
-                hostSteamID = new SteamId() { Value = Convert.ToUInt64(host) };
+                hostSteamID = new SteamId() { Value = host };
                 connectedComplete = new TaskCompletionSource<Task>();
 
                 OnConnected += SetConnectedComplete;
-                CloseP2PSessionWithUser(hostSteamID);
-
                 SendInternal(hostSteamID, InternalMessages.CONNECT);
 
                 Task connectedCompleteTask = connectedComplete.Task;
