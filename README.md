@@ -22,7 +22,7 @@ Both of these projects need to be installed and working before you can use this 
 If you know a better way around this please make a [Issue ticket.](https://github.com/Chykary/FizzyFacepunch/issues)**
 
 ## Host
-To be able to have your game working you need to make sure you have Steam running in the background. **SteamManager will print a Debug Message if it initializes correctly.**
+To be able to have your game working you need to make sure you have Steam running in the background.
 
 ## Client
 1. Send the game to your buddy.
@@ -31,4 +31,4 @@ To be able to have your game working you need to make sure you have Steam runnin
 5. Then they will be connected to you.
 
 ## Testing your game locally
-You cant connect to yourself locally while using **FizzyFacepunch** since it's using steams P2P. If you want to test your game locally you'll have to use **"Telepathy Transport"** instead of **"Fizzy Steamy Mirror"**.
+You cant connect to yourself locally while using **FizzyFacepunch** since it's using steams P2P. If you want to test your game locally you'll have to use **"Telepathy Transport"** instead of **FizzyFacepunch**.
