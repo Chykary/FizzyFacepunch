@@ -33,7 +33,6 @@ namespace Mirror.FizzySteam
         private void Awake()
         {
             Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamMirror.");
-
             try
             {
                 SteamClient.Init(SteamAppID, false);
@@ -42,10 +41,14 @@ namespace Mirror.FizzySteam
             catch (Exception e)
             {
                 Debug.LogError($"FizzyFacepunch could not initialise: {e.Message}");
-            }
+            }            
         }
 
-        private void LateUpdate() => activeNode?.ReceiveData(); 
+        private void LateUpdate()
+        {
+            SteamClient.RunCallbacks();
+            activeNode?.ReceiveData();
+        }
 
         public override bool ClientConnected() => ClientActive() && client.Connected;
         public override void ClientConnect(string address)

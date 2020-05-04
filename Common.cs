@@ -45,6 +45,8 @@ namespace Mirror.FizzySteam
 
         private void OnConnectFail(SteamId id, P2PSessionError err)
         {
+            OnConnectionFailed(id);
+
             switch (err)
             {
                 case P2PSessionError.NotRunningApp:
@@ -60,18 +62,19 @@ namespace Mirror.FizzySteam
             }
         }
 
-        protected void SendInternal(SteamId target, InternalMessages type) => SteamNetworking.SendP2PPacket(target, new byte[] { (byte) type }, 1, internal_ch, P2PSend.Reliable);
+        protected bool SendInternal(SteamId target, InternalMessages type) => SteamNetworking.SendP2PPacket(target, new byte[] { (byte)type }, 1, internal_ch);
         protected bool Send(SteamId host, byte[] msgBuffer, int channel) => SteamNetworking.SendP2PPacket(host, msgBuffer, msgBuffer.Length, channel, channels[channel]);
         private bool Receive(out SteamId clientSteamID, out byte[] receiveBuffer, int channel)
         {
             if (SteamNetworking.IsP2PPacketAvailable(channel))
-            {
+            { 
                 var data = SteamNetworking.ReadP2PPacket(channel);
 
                 if (data != null)
                 {
                     receiveBuffer = data.Value.Data;
                     clientSteamID = data.Value.SteamId;
+                    return true;
                 }
             }
 
@@ -114,5 +117,6 @@ namespace Mirror.FizzySteam
 
         protected abstract void OnReceiveInternalData(InternalMessages type, SteamId clientSteamID);
         protected abstract void OnReceiveData(byte[] data, SteamId clientSteamID, int channel);
+        protected abstract void OnConnectionFailed(SteamId remoteId);
     }
 }

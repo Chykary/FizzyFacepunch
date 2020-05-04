@@ -1,6 +1,3 @@
-# ⚠️ Work in progress
-If you just discovered this repo, **please be patient**. There will be expected issues and also the information down below will not be fully accurate until we have finished fizzyfacepunch. **Thank you!**
-
 # FizzyFacepunch
 
 This is an alternative version of **[FizzySteamworks](https://github.com/Chykary/FizzySteamworks)** that uses Facepunch instead of Steamworks.NET.
@@ -10,10 +7,6 @@ Mirror **[docs](https://mirror-networking.com/docs/Transports/Fizzy.html)** and 
 FizzyFacepunch brings together **[Steam](https://store.steampowered.com)** and **[Mirror](https://github.com/vis2k/Mirror)** utilising Async of a Steam P2P network transport layer for **Mirror**.
 
 ## Dependencies
-If you want an easy import, skip the steps below & download the latest **[unitypackage](https://github.com/Chykary/FizzyFacepunch/releases)**, **it has Facepunch already included**.
-
-**Note: If you already have Facepunch in your project, you might need to delete either your import or the one included in the FizzyFacepunch [unitypackage](https://github.com/Chykary/FizzyFacepunch/releases).**
-
 Both of these projects need to be installed and working before you can use this transport.
 1. **[Facepunch](https://github.com/Facepunch/Facepunch.Steamworks)** FizzyFacepunch relies on Facepunch to communicate with the **[Steamworks API](https://partner.steamgames.com/doc/sdk)**. **Requires .Net 4.x**  
 2. **[Mirror](https://github.com/vis2k/Mirror)** FizzyFacepunch is also obviously dependant on Mirror which is a streamline, bug fixed, maintained version of UNET for Unity.
