@@ -10,7 +10,7 @@ namespace Mirror.FizzySteam
     {
         public bool Error { get; private set; }
         public bool Connected { get; private set; }
-        private event Action<Exception> OnReceivedError;
+
         private event Action<byte[], int> OnReceivedData;
         private event Action OnConnected;
         private event Action OnDisconnected;
@@ -33,11 +33,9 @@ namespace Mirror.FizzySteam
             c.OnConnected += () => transport.OnClientConnected.Invoke();
             c.OnDisconnected += () => transport.OnClientDisconnected.Invoke();
             c.OnReceivedData += (data, channel) => transport.OnClientDataReceived.Invoke(new ArraySegment<byte>(data), channel);
-            c.OnReceivedError += (exception) => transport.OnClientError.Invoke(exception);
 
             if (SteamClient.IsValid)
-            {
-                
+            {                
                 c.Connect(host);
             }
             else
