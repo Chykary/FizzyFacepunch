@@ -33,7 +33,7 @@ namespace Mirror.FizzySteam
 
             if (!SteamClient.IsValid)
             {
-                Debug.LogError("SteamWorks not initialized");
+                Debug.LogError("SteamWorks not initialized.");
             }
 
             return s;

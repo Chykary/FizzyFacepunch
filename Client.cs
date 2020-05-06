@@ -8,6 +8,7 @@ namespace Mirror.FizzySteam
 {
     public class Client : Common
     {
+        public bool Error { get; private set; }
         public bool Connected { get; private set; }
         private event Action<Exception> OnReceivedError;
         private event Action<byte[], int> OnReceivedData;
@@ -25,7 +26,7 @@ namespace Mirror.FizzySteam
             ConnectionTimeout = TimeSpan.FromSeconds(Math.Max(1, transport.Timeout));
         }
 
-        public static Client CreateClient(FizzyFacepunch transport, ulong host)
+        public static Client CreateClient(FizzyFacepunch transport, string host)
         {
             Client c = new Client(transport);
 
@@ -36,25 +37,26 @@ namespace Mirror.FizzySteam
 
             if (SteamClient.IsValid)
             {
+                
                 c.Connect(host);
             }
             else
             {
-                Debug.LogError("SteamWorks not initialized");
+                Debug.LogError("SteamWorks not initialized.");
+                c.OnConnectionFailed(new SteamId());
             }
 
             return c;
         }
 
-        private async void Connect(ulong host)
+        private async void Connect(string host)
         {
             cancelToken = new CancellationTokenSource();
-
             try
             {
-                hostSteamID = host;
+                hostSteamID = ulong.Parse(host);
                 connectedComplete = new TaskCompletionSource<Task>();
-                
+
                 OnConnected += SetConnectedComplete;
                 SendInternal(hostSteamID, InternalMessages.CONNECT);
 
@@ -71,11 +73,20 @@ namespace Mirror.FizzySteam
             }
             catch (FormatException)
             {
-                OnReceivedError.Invoke(new Exception("ERROR passing steam ID address"));
+                Debug.LogError($"Connection string was not in the right format. Did you enter a SteamId?");
+                Error = true;
             }
             catch (Exception ex)
             {
-                OnReceivedError.Invoke(ex);
+                Debug.LogError(ex.Message);
+                Error = true;
+            }
+            finally
+            {
+                if (Error)
+                {
+                    OnConnectionFailed(new SteamId());
+                }
             }
         }
 
@@ -134,6 +145,6 @@ namespace Mirror.FizzySteam
         }
 
         public bool Send(byte[] data, int channelId) => Send(hostSteamID, data, channelId);
-        protected override void OnConnectionFailed(SteamId remoteId) => OnDisconnected.Invoke();
+        protected override void OnConnectionFailed(SteamId remoteId) => OnDisconnected.Invoke();        
     }
 }

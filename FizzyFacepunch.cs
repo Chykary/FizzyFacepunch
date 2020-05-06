@@ -56,6 +56,7 @@ namespace Mirror.FizzySteam
             if (!SteamClient.IsValid)
             {
                 Debug.LogError("SteamWorks not initialized. Client could not be started.");
+                OnClientDisconnected.Invoke();
                 return;
             }
 
@@ -67,12 +68,12 @@ namespace Mirror.FizzySteam
                 return;
             }
 
-            if (!ClientActive())
+            if (!ClientActive() || client.Error)
             {
                 Debug.Log($"Starting client, target address {address}.");
 
                 SteamNetworking.AllowP2PPacketRelay(AllowSteamRelay);
-                client = Client.CreateClient(this, ulong.Parse(address));
+                client = Client.CreateClient(this, address);
                 activeNode = client;
             }
             else
