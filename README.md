@@ -27,7 +27,7 @@ To be able to have your game working you need to make sure you have Steam runnin
 ## Client
 1. Send the game to your buddy.
 2. Your buddy needs your **steamID64** to be able to connect. The transport shows your Steam User ID after you have started a server.
-3. Place the **steamID64** into **"localhost"** then click **"Lan Client"**
+3. Place the **steamID64** into **"localhost"** then click **"Client"**
 5. Then they will be connected to you.
 
 ## Testing your game locally
