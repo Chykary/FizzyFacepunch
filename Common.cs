@@ -29,10 +29,11 @@ namespace Mirror.FizzySteam
             this.transport = transport;
         }
 
-        protected IEnumerator WaitDisconnect(SteamId steamID)
+        protected void WaitForClose(SteamId cSteamID) => transport.StartCoroutine(DelayedClose(cSteamID));
+        private IEnumerator DelayedClose(SteamId cSteamID)
         {
-            yield return new WaitForSeconds(0.1f);
-            CloseP2PSessionWithUser(steamID);
+            yield return null;
+            CloseP2PSessionWithUser(cSteamID);
         }
 
         protected void Dispose()
@@ -46,6 +47,7 @@ namespace Mirror.FizzySteam
         private void OnConnectFail(SteamId id, P2PSessionError err)
         {
             OnConnectionFailed(id);
+            CloseP2PSessionWithUser(id);
 
             switch (err)
             {
@@ -67,7 +69,7 @@ namespace Mirror.FizzySteam
         private bool Receive(out SteamId clientSteamID, out byte[] receiveBuffer, int channel)
         {
             if (SteamNetworking.IsP2PPacketAvailable(channel))
-            { 
+            {
                 var data = SteamNetworking.ReadP2PPacket(channel);
 
                 if (data != null)
@@ -89,23 +91,24 @@ namespace Mirror.FizzySteam
         {
             try
             {
-                for (int chNum = 0; chNum < channels.Length; chNum++)
-                {
-                    while (Receive(out SteamId clientSteamID, out byte[] receiveBuffer, chNum))
-                    {
-                        OnReceiveData(receiveBuffer, clientSteamID, chNum);
-                    }
-                }
-
                 while (Receive(out SteamId clientSteamID, out byte[] internalMessage, internal_ch))
                 {
                     if (internalMessage.Length == 1)
                     {
                         OnReceiveInternalData((InternalMessages)internalMessage[0], clientSteamID);
+                        return;
                     }
                     else
                     {
                         Debug.Log("Incorrect package length on internal channel.");
+                    }
+                }
+
+                for (int chNum = 0; chNum < channels.Length; chNum++)
+                {
+                    while (Receive(out SteamId clientSteamID, out byte[] receiveBuffer, chNum))
+                    {
+                        OnReceiveData(receiveBuffer, clientSteamID, chNum);
                     }
                 }
             }

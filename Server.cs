@@ -67,11 +67,11 @@ namespace Mirror.FizzySteam
                     Debug.Log($"Client with SteamID {clientSteamID} connected. Assigning connection id {connectionId}");
                     break;
                 case InternalMessages.DISCONNECT:
-                    if (steamToMirrorIds.Contains(clientSteamID))
+                    if (steamToMirrorIds.TryGetValue(clientSteamID, out int connId))
                     {
-                        OnDisconnected.Invoke(steamToMirrorIds[clientSteamID]);
-                        steamToMirrorIds.Remove(clientSteamID);
+                        OnDisconnected.Invoke(connId);                        
                         CloseP2PSessionWithUser(clientSteamID);
+                        steamToMirrorIds.Remove(clientSteamID);
                         Debug.Log($"Client with SteamID {clientSteamID} disconnected.");
                     }
                     else
@@ -88,9 +88,8 @@ namespace Mirror.FizzySteam
 
         protected override void OnReceiveData(byte[] data, SteamId clientSteamID, int channel)
         {
-            if (steamToMirrorIds.Contains(clientSteamID))
+            if (steamToMirrorIds.TryGetValue(clientSteamID, out int connectionId))
             {
-                int connectionId = steamToMirrorIds[clientSteamID];
                 OnReceivedData.Invoke(connectionId, data, channel);
             }
             else
@@ -103,13 +102,9 @@ namespace Mirror.FizzySteam
 
         public bool Disconnect(int connectionId)
         {
-            if (steamToMirrorIds.Contains(connectionId))
+            if (steamToMirrorIds.TryGetValue(connectionId, out SteamId steamID))
             {
-                SteamId steamID = steamToMirrorIds[connectionId];
-                steamToMirrorIds.Remove(connectionId);
-
                 SendInternal(steamID, InternalMessages.DISCONNECT);
-                transport.StartCoroutine(WaitDisconnect(steamID));
 
                 return true;
             }
@@ -122,18 +117,25 @@ namespace Mirror.FizzySteam
 
         public void Shutdown()
         {
-            Dispose();
+            foreach (KeyValuePair<SteamId, int> client in steamToMirrorIds)
+            {
+                Disconnect(client.Value);
+                WaitForClose(client.Key);
+            }
+
             SteamNetworking.OnP2PSessionRequest = null;
+            Dispose();
         }
+
 
         public bool SendAll(List<int> connectionIds, byte[] data, int channelId)
         {
             bool success = true;
             foreach (int connId in connectionIds)
             {
-                if (steamToMirrorIds.Contains(connId))
+                if (steamToMirrorIds.TryGetValue(connId, out SteamId steamId))
                 {
-                    success = success && Send(steamToMirrorIds[connId], data, channelId);
+                    success = success && Send(steamId, data, channelId);
                 }
                 else
                 {
@@ -147,9 +149,9 @@ namespace Mirror.FizzySteam
 
         public string ServerGetClientAddress(int connectionId)
         {
-            if (steamToMirrorIds.Contains(connectionId))
+            if (steamToMirrorIds.TryGetValue(connectionId, out SteamId steamId))
             {
-                return steamToMirrorIds[connectionId].ToString();
+                return steamId.ToString();
             }
             else
             {
@@ -161,8 +163,8 @@ namespace Mirror.FizzySteam
 
         protected override void OnConnectionFailed(SteamId remoteId)
         {
-            int connId = steamToMirrorIds.Contains(remoteId) ? steamToMirrorIds[remoteId] : nextConnectionID++;
-            OnDisconnected.Invoke(steamToMirrorIds[remoteId]);
+            int connectionId = steamToMirrorIds.TryGetValue(remoteId, out int connId) ? connId : nextConnectionID++;
+            OnDisconnected.Invoke(connectionId);
         }
     }
 }

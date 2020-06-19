@@ -90,11 +90,12 @@ namespace Mirror.FizzySteam
 
         public void Disconnect()
         {
+            Debug.Log("Sending Disconnect message");
             SendInternal(hostSteamID, InternalMessages.DISCONNECT);
             Dispose();
-            cancelToken.Cancel();
+            cancelToken?.Cancel();
 
-            transport.StartCoroutine(WaitDisconnect(hostSteamID));
+            WaitForClose(hostSteamID);
         }
 
         private void SetConnectedComplete() => connectedComplete.SetResult(connectedComplete.Task);

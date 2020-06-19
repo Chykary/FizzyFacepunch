@@ -2,7 +2,6 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 namespace Mirror.FizzySteam
@@ -42,7 +41,7 @@ namespace Mirror.FizzySteam
             catch (Exception e)
             {
                 Debug.LogError($"FizzyFacepunch could not initialise: {e.Message}");
-            }            
+            }
         }
 
         private void LateUpdate()
@@ -91,7 +90,13 @@ namespace Mirror.FizzySteam
             ClientConnect(uri.Host);
         }
 
-        public override bool ClientSend(int channelId, ArraySegment<byte> segment) => client.Send(segment.ToArray(), channelId);
+        public override bool ClientSend(int channelId, ArraySegment<byte> segment)
+        {
+            byte[] data = new byte[segment.Count];
+            Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
+            return client.Send(data, channelId);
+        }
+
         public override void ClientDisconnect()
         {
             if (ClientActive())
@@ -143,7 +148,18 @@ namespace Mirror.FizzySteam
             return steamBuilder.Uri;
         }
 
-        public override bool ServerSend(List<int> connectionIds, int channelId, ArraySegment<byte> segment) => ServerActive() && server.SendAll(connectionIds, segment.ToArray(), channelId);
+        public override bool ServerSend(List<int> connectionIds, int channelId, ArraySegment<byte> segment)
+        {
+            if (ServerActive())
+            {
+                byte[] data = new byte[segment.Count];
+                Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
+                server.SendAll(connectionIds, data, channelId);
+            }
+
+            return false;
+        }
+
         public override bool ServerDisconnect(int connectionId) => ServerActive() && server.Disconnect(connectionId);
         public override string ServerGetClientAddress(int connectionId) => ServerActive() ? server.ServerGetClientAddress(connectionId) : string.Empty;
         public override void ServerStop()
