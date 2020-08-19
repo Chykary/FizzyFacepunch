@@ -46,8 +46,11 @@ namespace Mirror.FizzySteam
 
         private void LateUpdate()
         {
-            SteamClient.RunCallbacks();
-            activeNode?.ReceiveData();
+            if (enabled)
+            {
+                SteamClient.RunCallbacks();
+                activeNode?.ReceiveData();
+            }
         }
 
         public override bool ClientConnected() => ClientActive() && client.Connected;
