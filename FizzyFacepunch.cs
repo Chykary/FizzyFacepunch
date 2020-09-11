@@ -157,7 +157,7 @@ namespace Mirror.FizzySteam
             {
                 byte[] data = new byte[segment.Count];
                 Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
-                server.SendAll(connectionIds, data, channelId);
+                return server.SendAll(connectionIds, data, channelId);
             }
 
             return false;
