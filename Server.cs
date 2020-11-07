@@ -128,23 +128,17 @@ namespace Mirror.FizzySteam
         }
 
 
-        public bool SendAll(List<int> connectionIds, byte[] data, int channelId)
+        public void SendAll(int connectionId, byte[] data, int channelId)
         {
-            bool success = true;
-            foreach (int connId in connectionIds)
+            if (steamToMirrorIds.TryGetValue(connectionId, out SteamId steamId))
             {
-                if (steamToMirrorIds.TryGetValue(connId, out SteamId steamId))
-                {
-                    success = success && Send(steamId, data, channelId);
-                }
-                else
-                {
-                    Debug.LogError("Trying to send on unknown connection: " + connId);
-                    OnReceivedError.Invoke(connId, new Exception("ERROR Unknown Connection"));
-                }
+                Send(steamId, data, channelId);
             }
-
-            return success;
+            else
+            {
+                Debug.LogError("Trying to send on unknown connection: " + connectionId);
+                OnReceivedError.Invoke(connectionId, new Exception("ERROR Unknown Connection"));
+            }
         }
 
         public string ServerGetClientAddress(int connectionId)

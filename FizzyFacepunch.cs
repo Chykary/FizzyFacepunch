@@ -93,11 +93,11 @@ namespace Mirror.FizzySteam
             ClientConnect(uri.Host);
         }
 
-        public override bool ClientSend(int channelId, ArraySegment<byte> segment)
+        public override void ClientSend(int channelId, ArraySegment<byte> segment)
         {
             byte[] data = new byte[segment.Count];
             Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
-            return client.Send(data, channelId);
+            client.Send(data, channelId);
         }
 
         public override void ClientDisconnect()
@@ -151,16 +151,14 @@ namespace Mirror.FizzySteam
             return steamBuilder.Uri;
         }
 
-        public override bool ServerSend(List<int> connectionIds, int channelId, ArraySegment<byte> segment)
+        public override void ServerSend(int connectionId, int channelId, ArraySegment<byte> segment)
         {
             if (ServerActive())
             {
                 byte[] data = new byte[segment.Count];
                 Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
-                return server.SendAll(connectionIds, data, channelId);
+                server.SendAll(connectionId, data, channelId);
             }
-
-            return false;
         }
 
         public override bool ServerDisconnect(int connectionId) => ServerActive() && server.Disconnect(connectionId);
