@@ -35,7 +35,14 @@ namespace Mirror.FizzySteam
             Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamMirror.");
             try
             {
-                SteamClient.Init(SteamAppID, false);
+                if (SteamClient.IsValid)
+                {
+                    Debug.Log($"Skipping Steam init, {nameof(SteamClient)} already started");
+                }
+                else
+                {
+                    SteamClient.Init(SteamAppID, false);
+                }
                 Invoke(nameof(FetchSteamID), 1f);
             }
             catch (Exception e)
