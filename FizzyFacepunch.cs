@@ -191,6 +191,12 @@ namespace Mirror.FizzySteam
 
         public override int GetMaxPacketSize(int channelId)
         {
+            if (channelId >= Channels.Length)
+            {
+                Debug.LogError("Channel Id exceeded configured channels! Please configure more channels.");
+                return 1200;
+            }
+
             switch (Channels[channelId])
             {
                 case P2PSend.Unreliable:
