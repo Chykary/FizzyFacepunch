@@ -76,7 +76,7 @@ namespace Mirror.FizzySteam
                     }
                     else
                     {
-                        OnReceivedError.Invoke(-1, new Exception("ERROR Unknown SteamID"));
+                        OnReceivedError.Invoke(-1, new Exception("ERROR Unknown SteamID while receiving disconnect message."));
                     }
 
                     break;

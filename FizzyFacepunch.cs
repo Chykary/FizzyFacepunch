@@ -11,13 +11,13 @@ namespace Mirror.FizzySteam
     {
         private const string STEAM_SCHEME = "steam";
 
-        private Client client;
-        private Server server;
+        private static Client client;
+        private static Server server;
 
-        private Common activeNode;
+        private static Common activeNode;
 
         [SerializeField]
-        public P2PSend[] Channels = new P2PSend[1] { P2PSend.Reliable };
+        public P2PSend[] Channels = new P2PSend[2] { P2PSend.Reliable , P2PSend.UnreliableNoDelay };
 
         [Tooltip("Timeout for connecting in seconds.")]
         public int Timeout = 25;
@@ -180,13 +180,19 @@ namespace Mirror.FizzySteam
 
         public override void Shutdown()
         {
-            server?.Shutdown();
-            client?.Disconnect();
+            if (server != null)
+            {
+                server.Shutdown();
+                server = null;
+                Debug.Log("Transport shut down - was server.");
+            }
 
-            server = null;
-            client = null;
-            activeNode = null;
-            Debug.Log("Transport shut down.");
+            if (client != null)
+            {
+                client.Disconnect();
+                client = null;
+                Debug.Log("Transport shut down - was client.");
+            }
         }
 
         public override int GetMaxPacketSize(int channelId)
