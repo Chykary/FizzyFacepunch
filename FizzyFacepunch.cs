@@ -51,12 +51,22 @@ namespace Mirror.FizzySteam
             }
         }
 
-        private void LateUpdate()
-        {
-            if (enabled)
-            {
-                SteamClient.RunCallbacks();
-                activeNode?.ReceiveData();
+        public override void ClientEarlyUpdate() {
+            if ( enabled ) {
+                if (client != null) {
+                    SteamClient.RunCallbacks();
+                    client.ReceiveData();
+                }
+            }
+        }
+
+        public override void ServerEarlyUpdate() {
+            if ( enabled ) {
+                // If no client exists, run callbacks in the server
+                if ( client == null ) {
+                    SteamClient.RunCallbacks();
+                }
+                server?.ReceiveData();
             }
         }
 
