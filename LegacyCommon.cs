@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Mirror.FizzySteam
 {
-    public abstract class Common
+    public abstract class LegacyCommon
     {
         private P2PSend[] channels;
         private int internal_ch => channels.Length;
@@ -19,7 +19,7 @@ namespace Mirror.FizzySteam
 
         protected readonly FizzyFacepunch transport;
 
-        protected Common(FizzyFacepunch transport)
+        protected LegacyCommon(FizzyFacepunch transport)
         {
             channels = transport.Channels;
 
