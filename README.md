@@ -4,7 +4,7 @@ This is an alternative version of **[FizzySteamworks](https://github.com/Chykary
 
 Mirror **[docs](https://mirror-networking.com/docs/Transports/Fizzy.html)** and the official community **[Discord](https://discord.gg/N9QVxbM)**.
 
-FizzyFacepunch brings together **[Steam](https://store.steampowered.com)** and **[Mirror](https://github.com/vis2k/Mirror)** utilising Async of a Steam P2P network transport layer for **Mirror**.
+FizzyFacepunch brings together **[Steam](https://store.steampowered.com)** and **[Mirror](https://github.com/vis2k/Mirror)** . It supports both the old SteamNetworking as well as the new SteamSockets.
 
 ## Dependencies
 Both of these projects need to be installed and working before you can use this transport.

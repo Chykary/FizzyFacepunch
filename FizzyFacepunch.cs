@@ -27,6 +27,9 @@ namespace Mirror.FizzySteam
     [Tooltip("Use SteamSockets instead of the (deprecated) SteamNetworking. This will always use Relay.")]
     public bool UseNextGenSteamNetworking = true;
 
+    [Tooltip("Check this if you want the transport to initialise Facepunch.")]
+    public bool InitFacepunch = true;
+
     [Header("Info")]
     [Tooltip("This will display your Steam User ID when you start or connect to a server.")]
     public ulong SteamUserID;
@@ -47,14 +50,14 @@ namespace Mirror.FizzySteam
       {
         File.WriteAllText(fileName, SteamAppID.ToString());
         Debug.Log($"New {fileName} written with SteamAppID {SteamAppID}");
-      }
-
-      if (UseNextGenSteamNetworking)
-      {
-        SteamNetworkingUtils.InitRelayNetworkAccess();
-      }
+      }            
 
       Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamworks.");
+
+      if (InitFacepunch)
+      {
+        SteamClient.Init(uint.Parse(SteamAppID), true);
+      }
 
       Invoke(nameof(FetchSteamID), 1f);
     }
@@ -272,9 +275,14 @@ namespace Mirror.FizzySteam
     }
 
     private void FetchSteamID()
-    {
+    {    
       if (SteamClient.IsValid)
       {
+        if (UseNextGenSteamNetworking)
+        {
+          SteamNetworkingUtils.InitRelayNetworkAccess();
+        }
+
         SteamUserID = SteamClient.SteamId;
       }
     }
