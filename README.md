@@ -13,7 +13,7 @@ Both of these projects need to be installed and working before you can use this 
 
 ## Setting Up
 
-1. Install Mirror **(Requires Mirror 8.0+)** from the official repo **[Download Mirror](https://github.com/vis2k/Mirror/releases)**.
+1. Install Mirror **(Requires Mirror 35.0+)** from the official repo **[Download Mirror](https://github.com/vis2k/Mirror/releases)**.
 2. Install FizzyFacepunch **[unitypackage](https://github.com/Chykary/FizzyFacepunch/releases)** from the release section.
 3. In your **"NetworkManager"** object replace **"Telepathy"** script with **"FizzyFacepunch"** script.
 4. Enter your Steam App ID in the **"FizzyFacepunch"** script.
