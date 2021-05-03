@@ -114,6 +114,7 @@ namespace Mirror.FizzySteam
         conn.Close(false, 0, "Disconnected by server");
         steamIDToMirrorID.Remove(connectionId);
         connToMirrorID.Remove(connectionId);
+        OnDisconnected(connectionId);
         return true;
       }
       else

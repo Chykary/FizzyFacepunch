@@ -7,7 +7,7 @@ using UnityEngine;
 
 public abstract class NextCommon
 {
-  protected const int MAX_MESSAGES = 1024;
+  protected const int MAX_MESSAGES = 256;
 
   protected Result SendSocket(Connection conn, byte[] data, int channelId)
   {    
