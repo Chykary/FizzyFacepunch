@@ -156,6 +156,7 @@ namespace Mirror.FizzySteam
     public void Disconnect()
     {
       cancelToken?.Cancel();
+      SteamNetworkingSockets.OnConnectionStatusChanged -= OnConnectionStatusChanged;
 
       if (HostConnectionManager != null)
       {
