@@ -2,7 +2,7 @@
 
 This is an alternative version of **[FizzySteamworks](https://github.com/Chykary/FizzySteamworks)** that uses Facepunch instead of Steamworks.NET.
 
-Mirror **[docs](https://mirror-networking.com/docs/Transports/Fizzy.html)** and the official community **[Discord](https://discord.gg/N9QVxbM)**.
+Mirror **[docs](https://mirror-networking.gitbook.io/docs/transports/fizzyfacepunch-transport)** and the official community **[Discord](https://discord.gg/N9QVxbM)**.
 
 FizzyFacepunch brings together **[Steam](https://store.steampowered.com)** and **[Mirror](https://github.com/vis2k/Mirror)** . It supports both the old SteamNetworking as well as the new SteamSockets.
 
