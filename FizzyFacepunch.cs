@@ -140,7 +140,7 @@ namespace Mirror.FizzySteam
       ClientConnect(uri.Host);
     }
 
-    public override void ClientSend(int channelId, ArraySegment<byte> segment)
+    public override void ClientSend(ArraySegment<byte> segment, int channelId)
     {
       byte[] data = new byte[segment.Count];
       Array.Copy(segment.Array, segment.Offset, data, 0, segment.Count);
@@ -205,7 +205,7 @@ namespace Mirror.FizzySteam
       return steamBuilder.Uri;
     }
 
-    public override void ServerSend(int connectionId, int channelId, ArraySegment<byte> segment)
+    public override void ServerSend(int connectionId, ArraySegment<byte> segment, int channelId)
     {
       if (ServerActive())
       {
