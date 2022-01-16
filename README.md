@@ -13,10 +13,14 @@ Both of these projects need to be installed and working before you can use this 
 
 ## Setting Up
 
-1. Install Mirror **(Requires Mirror 37.0+)** from the official repo **[Download Mirror](https://github.com/vis2k/Mirror/releases)**.
+1. Install Mirror **(Requires Mirror 53.0+)** from the official repo **[Download Mirror](https://github.com/vis2k/Mirror/releases)**.
 2. Install FizzyFacepunch **[unitypackage](https://github.com/Chykary/FizzyFacepunch/releases)** from the release section.
 3. In your **"NetworkManager"** object replace **"Telepathy/KCP"** script with **"FizzyFacepunch"** script.
 4. Enter your Steam App ID in the **"FizzyFacepunch"** script.
+
+If the latest FizzyFacepunch unitypackage doesn't work then download the source of this repo,
+and copy it to the `Assets/Mirror/Runtime/Transports/FizzyFacepunch` folder in your Unity project.
+(because maybe someone already fixed it)
 
 **Note: The  default 480(Spacewar) appid is a very grey area, technically, it's not allowed but they don't really do anything about it. When you have your own appid from steam then replace the 480 with your own game appid.
 If you know a better way around this please make a [Issue ticket.](https://github.com/Chykary/FizzyFacepunch/issues)**
