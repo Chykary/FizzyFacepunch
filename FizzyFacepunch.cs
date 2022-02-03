@@ -103,6 +103,12 @@ namespace Mirror.FizzySteam
         OnClientDisconnected.Invoke();
         return;
       }
+      
+      if (address == SteamUserID.ToString())
+      {
+        Debug.Log("You can't connect to yourself.");
+        return;
+      }
 
       FetchSteamID();
 
