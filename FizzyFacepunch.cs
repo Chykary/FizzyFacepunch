@@ -20,7 +20,7 @@ namespace Mirror.FizzySteam
     [Tooltip("Timeout for connecting in seconds.")]
     public int Timeout = 25;
     [Tooltip("The Steam ID for your application.")]
-    public string SteamAppID = "480";
+    public uint SteamAppID = 480;
     [Tooltip("Allow or disallow P2P connections to fall back to being relayed through the Steam servers if a direct connection or NAT-traversal cannot be established.")]
     public bool AllowSteamRelay = true;
 
@@ -36,32 +36,22 @@ namespace Mirror.FizzySteam
 
     private void Awake()
     {
-      const string fileName = "steam_appid.txt";
-      if (File.Exists(fileName))
+      Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamworks.");
+
+      if (!InitFacepunch) return;
+      
+      var initialised = InitialiseSteamworks(SteamAppID);
+      if (initialised)
       {
-        string content = File.ReadAllText(fileName);
-        if (content != SteamAppID)
-        {
-          File.WriteAllText(fileName, SteamAppID.ToString());
-          Debug.Log($"Updating {fileName}. Previous: {content}, new SteamAppID {SteamAppID}");
-        }
+        Debug.Log("SteamWorks initialised");
+        FetchSteamID();
       }
       else
       {
-        File.WriteAllText(fileName, SteamAppID.ToString());
-        Debug.Log($"New {fileName} written with SteamAppID {SteamAppID}");
-      }            
-
-      Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamworks.");
-
-      if (InitFacepunch)
-      {
-        SteamClient.Init(uint.Parse(SteamAppID), true);
+        Debug.LogError("The Steam client is not open! or something else has happened.");
       }
-
-      Invoke(nameof(FetchSteamID), 1f);
     }
-
+    
     public override void ClientEarlyUpdate()
     {
       if (enabled)
@@ -291,6 +281,19 @@ namespace Mirror.FizzySteam
 
         SteamUserID = SteamClient.SteamId;
       }
+    }
+    
+    private bool InitialiseSteamworks(uint appid)
+    {
+      try
+      {
+        SteamClient.Init( appid, true );
+      }
+      catch ( Exception e )
+      {
+        return false;
+      }
+      return true;
     }
 
     private void OnDestroy()
