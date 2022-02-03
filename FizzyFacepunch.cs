@@ -41,15 +41,10 @@ namespace Mirror.FizzySteam
       if (!InitFacepunch) return;
       
       var initialised = InitialiseSteamworks(SteamAppID);
-      if (initialised)
-      {
-        Debug.Log("SteamWorks initialised");
-        FetchSteamID();
-      }
-      else
-      {
-        Debug.LogError("The Steam client is not open! or something else has happened.");
-      }
+      if (!initialised) return;
+      
+      Debug.Log("SteamWorks initialised");
+      FetchSteamID();
     }
     
     public override void ClientEarlyUpdate()
@@ -291,6 +286,7 @@ namespace Mirror.FizzySteam
       }
       catch ( Exception e )
       {
+        Debug.LogError("Could be one of the following: Steam is closed, Can't find steam_api dlls or Don't have permission to open appid");
         return false;
       }
       return true;
