@@ -20,7 +20,7 @@ namespace Mirror.FizzySteam
     [Tooltip("Timeout for connecting in seconds.")]
     public int Timeout = 25;
     [Tooltip("The Steam ID for your application.")]
-    public string SteamAppID = "480";
+    public uint SteamAppID = 480;
     [Tooltip("Allow or disallow P2P connections to fall back to being relayed through the Steam servers if a direct connection or NAT-traversal cannot be established.")]
     public bool AllowSteamRelay = true;
 
@@ -36,32 +36,17 @@ namespace Mirror.FizzySteam
 
     private void Awake()
     {
-      const string fileName = "steam_appid.txt";
-      if (File.Exists(fileName))
-      {
-        string content = File.ReadAllText(fileName);
-        if (content != SteamAppID)
-        {
-          File.WriteAllText(fileName, SteamAppID.ToString());
-          Debug.Log($"Updating {fileName}. Previous: {content}, new SteamAppID {SteamAppID}");
-        }
-      }
-      else
-      {
-        File.WriteAllText(fileName, SteamAppID.ToString());
-        Debug.Log($"New {fileName} written with SteamAppID {SteamAppID}");
-      }            
-
       Debug.Assert(Channels != null && Channels.Length > 0, "No channel configured for FizzySteamworks.");
 
-      if (InitFacepunch)
-      {
-        SteamClient.Init(uint.Parse(SteamAppID), true);
-      }
-
-      Invoke(nameof(FetchSteamID), 1f);
+      if (!InitFacepunch) return;
+      
+      var initialised = InitialiseSteamworks(SteamAppID);
+      if (!initialised) return;
+      
+      Debug.Log("SteamWorks initialised");
+      FetchSteamID();
     }
-
+    
     public override void ClientEarlyUpdate()
     {
       if (enabled)
@@ -291,6 +276,20 @@ namespace Mirror.FizzySteam
 
         SteamUserID = SteamClient.SteamId;
       }
+    }
+    
+    private bool InitialiseSteamworks(uint appid)
+    {
+      try
+      {
+        SteamClient.Init( appid, true );
+      }
+      catch ( Exception e )
+      {
+        Debug.LogError("Could be one of the following: Steam is closed, Can't find steam_api dlls or Don't have permission to open appid");
+        return false;
+      }
+      return true;
     }
 
     private void OnDestroy()
