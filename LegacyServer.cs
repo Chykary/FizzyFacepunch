@@ -10,7 +10,7 @@ namespace Mirror.FizzySteam
     private event Action<int> OnConnected;
     private event Action<int, byte[], int> OnReceivedData;
     private event Action<int> OnDisconnected;
-    private event Action<int, Exception> OnReceivedError;
+    private event Action<int, TransportError, string> OnReceivedError;
 
     private BidirectionalDictionary<SteamId, int> steamToMirrorIds;
     private int maxConnections;
@@ -23,7 +23,7 @@ namespace Mirror.FizzySteam
       s.OnConnected += (id) => transport.OnServerConnected.Invoke(id);
       s.OnDisconnected += (id) => transport.OnServerDisconnected.Invoke(id);
       s.OnReceivedData += (id, data, channel) => transport.OnServerDataReceived.Invoke(id, new ArraySegment<byte>(data), channel);
-      s.OnReceivedError += (id, exception) => transport.OnServerError.Invoke(id, exception);
+      s.OnReceivedError += (id, exception, message) => transport.OnServerError.Invoke(id, exception, message);
 
       SteamNetworking.OnP2PSessionRequest = (steamid) =>
       {
@@ -76,7 +76,7 @@ namespace Mirror.FizzySteam
           }
           else
           {
-            OnReceivedError.Invoke(-1, new Exception("ERROR Unknown SteamID while receiving disconnect message."));
+            OnReceivedError.Invoke(-1, TransportError.Refused, "ERROR Unknown SteamID while receiving disconnect message.");
           }
 
           break;
@@ -96,7 +96,7 @@ namespace Mirror.FizzySteam
       {
         CloseP2PSessionWithUser(clientSteamID);
         Debug.LogError("Data received from steam client thats not known " + clientSteamID);
-        OnReceivedError.Invoke(-1, new Exception("ERROR Unknown SteamID"));
+        OnReceivedError.Invoke(-1, TransportError.Refused, "ERROR Unknown SteamID");
       }
     }
 
@@ -135,7 +135,7 @@ namespace Mirror.FizzySteam
       else
       {
         Debug.LogError("Trying to send on unknown connection: " + connectionId);
-        OnReceivedError.Invoke(connectionId, new Exception("ERROR Unknown Connection"));
+        OnReceivedError.Invoke(connectionId, TransportError.Unexpected, "ERROR Unknown Connection");
       }
     }
 
@@ -148,7 +148,7 @@ namespace Mirror.FizzySteam
       else
       {
         Debug.LogError("Trying to get info on unknown connection: " + connectionId);
-        OnReceivedError.Invoke(connectionId, new Exception("ERROR Unknown Connection"));
+        OnReceivedError.Invoke(connectionId, TransportError.Unexpected, "ERROR Unknown Connection");
         return string.Empty;
       }
     }
