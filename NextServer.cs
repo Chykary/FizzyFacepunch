@@ -35,7 +35,7 @@ namespace Mirror.FizzySteam
       s.OnConnected += (id) => transport.OnServerConnected.Invoke(id);
       s.OnDisconnected += (id) => transport.OnServerDisconnected.Invoke(id);
       s.OnReceivedData += (id, data, ch) => transport.OnServerDataReceived.Invoke(id, new ArraySegment<byte>(data), ch);
-      s.OnReceivedError += (id, exception) => transport.OnServerError.Invoke(id, exception);
+      s.OnReceivedError += (id, exception) => transport.OnServerError.Invoke(id, TransportError.Unexpected, exception.ToString());
 
       if (!SteamClient.IsValid)
       {
