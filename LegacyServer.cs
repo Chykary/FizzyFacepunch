@@ -20,7 +20,7 @@ namespace Mirror.FizzySteam
     {
       LegacyServer s = new LegacyServer(transport, maxConnections);
 
-      s.OnConnected += (id) => transport.OnServerConnected.Invoke(id);
+      s.OnConnected += (id) => transport.OnServerConnectedWithAddress.Invoke(id, id.ToString());
       s.OnDisconnected += (id) => transport.OnServerDisconnected.Invoke(id);
       s.OnReceivedData += (id, data, channel) => transport.OnServerDataReceived.Invoke(id, new ArraySegment<byte>(data), channel);
       s.OnReceivedError += (id, exception) => transport.OnServerError.Invoke(id, TransportError.Unexpected, exception.ToString());
