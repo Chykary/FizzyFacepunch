@@ -51,12 +51,8 @@ namespace Mirror.FizzySteam
 
             switch (err)
             {
-                case P2PSessionError.NotRunningApp:
-                    throw new Exception("Connection failed: The target user is not running the same game.");
                 case P2PSessionError.NoRightsToApp:
                     throw new Exception("Connection failed: The local user doesn't own the app that is running.");
-                case P2PSessionError.DestinationNotLoggedIn:
-                    throw new Exception("Connection failed: Target user isn't connected to Steam.");
                 case P2PSessionError.Timeout:
                     throw new Exception("Connection failed: The connection timed out because the target user didn't respond.");
                 default:
