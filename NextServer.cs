@@ -32,7 +32,7 @@ namespace Mirror.FizzySteam
     {
       NextServer s = new NextServer(maxConnections);
 
-      s.OnConnected += (id) => transport.OnServerConnectedWithAddress.Invoke(id, id.ToString());
+      s.OnConnected += (id) => transport.OnServerConnectedWithAddress.Invoke(id, s.ServerGetClientAddress(id));
       s.OnDisconnected += (id) => transport.OnServerDisconnected.Invoke(id);
       s.OnReceivedData += (id, data, ch) => transport.OnServerDataReceived.Invoke(id, new ArraySegment<byte>(data), ch);
       s.OnReceivedError += (id, exception) => transport.OnServerError.Invoke(id, TransportError.Unexpected, exception.ToString());
