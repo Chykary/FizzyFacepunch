@@ -140,7 +140,7 @@ namespace Mirror.FizzySteam
           }
         }
       }
-      else if (info.State == ConnectionState.ClosedByPeer)
+      else if (info.State == ConnectionState.ClosedByPeer||info.State == ConnectionState.ProblemDetectedLocally)
       {
         Connected = false;
         OnDisconnected.Invoke();
