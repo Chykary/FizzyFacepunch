@@ -26,7 +26,7 @@ and copy it to the `Assets/Mirror/Runtime/Transports/FizzyFacepunch` folder in y
 
 > [!WARNING]
 > **The  default 480 (Spacewar) appid is a legal grey area. Technically, it's not allowed to use it, but Valve doesn't really do anything about it. Though, as soon as you get your own appid from [Steamworks](https://partner.steamgames.com/doc/gettingstarted/onboarding), you should change it. 480 should never be used in production.
-> If you know a better way around this please open an [issue](https://github.com/axvemi/FizzyFacepunch/issues)**.
+> If you know a better way around this please open an [issue](https://github.com/Chykary/FizzyFacepunch/issues)**.
 
 ## Usage
 ### Host
