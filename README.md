@@ -9,8 +9,8 @@ Facepunch.Steamworks **[docs](https://wiki.facepunch.com/steamworks/)** and **[G
 ## Installation
 ### Dependencies
 Both of these projects need to be installed and working before you can use this transport.
-1. **[Facepunch.Steamworks](https://wiki.facepunch.com/steamworks/)** - FizzyFacepunch relies on Facepunch.Steamworks to communicate with the **[Steamworks API](https://partner.steamgames.com/doc/sdk)**. It implements Valve's clunky, raw C++ SDK into a clean, modern C# libary.
-2. **[Mirror](https://mirror-networking.com/)** - FizzyFacepunch is also obviously dependant on Mirror which is a streamline, bug fixed, maintained version of UNET for Unity.
+1. **[Facepunch.Steamworks](https://wiki.facepunch.com/steamworks/)** - FizzyFacepunch relies on Facepunch.Steamworks to communicate with the **[Steamworks API](https://partner.steamgames.com/doc/sdk)**. It implements Valve's clunky, raw C++ SDK into a clean, modern C# library.
+2. **[Mirror](https://mirror-networking.com/)** - FizzyFacepunch is also obviously dependent on Mirror which is a streamlined, bug fixed, maintained version of UNET for Unity.
 > [!NOTE]
 > Older Unity versions may require the API Compatibility Level set to .NET Framework 4.x.
 
@@ -21,8 +21,7 @@ Both of these projects need to be installed and working before you can use this 
 4. Enter your Steam App ID in the **"FizzyFacepunch"** script. For Development purposes, you can also use the 480. 
 
 > [!NOTE]
-> If the latest FizzyFacepunch unitypackage doesn't work, then download the source code of this repo,
-and copy it to the `Assets/Mirror/Runtime/Transports/FizzyFacepunch` folder in your Unity project. Somebody may have already fixed it in the latest source code.
+> If the latest FizzyFacepunch unitypackage doesn't work, then download the source code of this repo, and copy it to the `Assets/Mirror/Runtime/Transports/FizzyFacepunch` folder in your Unity project. Somebody may have already fixed it in the latest source code.
 
 > [!WARNING]
 > **The  default 480 (Spacewar) appid is a legal grey area. Technically, it's not allowed to use it, but Valve doesn't really do anything about it. Though, as soon as you get your own appid from [Steamworks](https://partner.steamgames.com/doc/gettingstarted/onboarding), you should change it. 480 should never be used in production.
