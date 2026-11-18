@@ -223,17 +223,21 @@ namespace Mirror.FizzySteam
 
     public override void Shutdown()
     {
-      if (server != null)
+      IServer currentServer = server;
+      IClient currentClient = client;
+
+      server = null;
+      client = null;
+
+      if (currentServer != null)
       {
-        server.Shutdown();
-        server = null;
+        currentServer.Shutdown();
         Debug.Log("Transport shut down - was server.");
       }
 
-      if (client != null)
+      if (currentClient != null)
       {
-        client.Disconnect();
-        client = null;
+        currentClient.Disconnect();
         Debug.Log("Transport shut down - was client.");
       }
     }
