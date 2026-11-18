@@ -98,8 +98,15 @@ namespace Mirror.FizzySteam
 
     public void Disconnect()
     {
-      Debug.Log("Sending Disconnect message");
-      SendInternal(hostSteamID, InternalMessages.DISCONNECT);
+      if (Connected)
+      {
+        Debug.Log("Sending Disconnect message");
+        SendInternal(hostSteamID, InternalMessages.DISCONNECT);
+
+        Connected = false;
+        OnDisconnected?.Invoke();
+      }
+
       Dispose();
       cancelToken?.Cancel();
 

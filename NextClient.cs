@@ -160,7 +160,14 @@ namespace Mirror.FizzySteam
 
       if (HostConnectionManager != null)
       {
-        Debug.Log("Sending Disconnect message");
+        if (Connected)
+        {
+          Debug.Log("Sending Disconnect message");
+
+          Connected = false;
+          OnDisconnected?.Invoke();
+        }
+
         HostConnection.Close(false, 0, "Graceful disconnect");
         HostConnectionManager = null;
       }
